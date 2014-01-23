@@ -5,7 +5,10 @@ angular.module('ng-kiosk', [])
     return {
       restrict: 'E',
       template: '<div></div>',
-      replace: true
+      replace: true,
+      link: function(scope, elem, attrs) {
+        scope.dataUrl = attrs.src;
+      }
     };
   });
 

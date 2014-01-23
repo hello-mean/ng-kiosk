@@ -16,4 +16,11 @@ describe('kiosk', function() {
       
       expect(element[0].tagName).toEqual('DIV');
   }); 
+
+  it('should set the data url to what is in the src attribute', function() {
+      var directiveHtml = '<kiosk src="http://jasonandbrianrcool.com/api"></kiosk>',
+          element = $compile(directiveHtml)($rootScope);
+      
+      expect($rootScope.dataUrl).toEqual('http://jasonandbrianrcool.com/api');
+  });
 });
