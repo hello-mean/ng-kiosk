@@ -10,8 +10,10 @@ angular.module('ng-kiosk', [])
         if (!attrs.src) {
           elem.html('<p><strong>ng-kiosk:src attribute not set</strong></p>');
           return;
-        }          
+        }
+
         scope.dataUrl = attrs.src;
+
         $http.get(scope.dataUrl)
           .then(function(resp) {
             scope.data = resp.data;
