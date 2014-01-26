@@ -13,17 +13,18 @@ describe('kiosk', function() {
     $httpBackend = _$httpBackend_;
   }));
 
-  it('should compile the kiosk element to a div', function() {
-      var directiveHtml = '<kiosk></kiosk>',
+  function getElement() {
+      var directiveHtml = '<kiosk src="http://jasonandbrianrcool.com/api"></kiosk>',
           element = $compile(directiveHtml)($rootScope);
-      
-      expect(element[0].tagName).toEqual('DIV');
+      return element;
+  };
+
+  it('should compile the kiosk element to a div', function() {
+      expect(getElement()[0].tagName).toEqual('DIV');
   }); 
 
   it('should set the data url to what is in the src attribute', function() {
-      var directiveHtml = '<kiosk src="http://jasonandbrianrcool.com/api"></kiosk>',
-          element = $compile(directiveHtml)($rootScope);
-      
+      getElement();
       expect($rootScope.dataUrl).toEqual('http://jasonandbrianrcool.com/api');
   });
 
@@ -58,4 +59,40 @@ describe('kiosk', function() {
       $httpBackend.flush();
       expect($rootScope.data).toEqual(JSON.parse(response));
    });
+
+   it('should set a class of is-initializing on the kiosk element', function() {
+     expect(getElement().hasClass('is-initializing')).toBe(true); 
+   });   
+
+   it('should only have is-ready class when http request is done', function() {
+     var directiveHtml = '<kiosk src="http://geocities.com"></kiosk>',
+         response = '{"_links":{}}',
+         element;
+
+     $httpBackend.expectGET('http://geocities.com').respond(200, response);
+     $rootScope.$apply(function() {
+       element = $compile(directiveHtml)($rootScope);
+       expect(element.hasClass('is-ready')).toBe(false);
+       expect(element.hasClass('is-initializing')).toBe(true);
+     });
+
+     $httpBackend.flush();
+     expect(element.hasClass('is-ready')).toBe(true);
+     expect(element.hasClass('is-initializing')).toBe(false);
+   });
+   
+   it('should have is-error class when http request fails', function() {
+     var directiveHtml = '<kiosk src="http://geocities.com"></kiosk>',
+         response = '{"_links":{}}',
+         element;
+
+     $httpBackend.expectGET('http://geocities.com').respond(400, response);
+     $rootScope.$apply(function() {
+       element = $compile(directiveHtml)($rootScope);
+     });
+
+     $httpBackend.flush();
+     expect(element.hasClass('is-ready')).toBe(false);
+     expect(element.hasClass('is-error')).toBe(true);
+   }); 
 });
