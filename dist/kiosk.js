@@ -43,9 +43,7 @@ angular.module('ng-kiosk.services')
     ];
     return function(elem, scope) {
       this.set = function(state) {
-        angular.forEach(states, function(s) {
-          elem.removeClass(s);
-        });
+        angular.forEach(states, elem.removeClass, elem);
         elem.addClass(state);
         scope.$broadcast('kiosk:' + state);
         scope.$emit('kiosk:' + state);
