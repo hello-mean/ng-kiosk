@@ -33,7 +33,7 @@ module.exports = function (grunt) {
     // but still available if needed
     concat: {
       dist: {
-        src:['src/kiosk.js', 'src/*.js'],
+        src:['src/kiosk.js', 'src/*.js', 'src/**/*.js'],
         dest: 'dist/kiosk.js'
       }
     },
