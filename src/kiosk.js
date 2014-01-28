@@ -19,7 +19,29 @@ angular.module('ng-kiosk', ['ng-kiosk.services'])
           .then(function(resp) {
             scope.data = resp.data;
             state.set('is-ready');
-          }, function() {
+            return resp.data;
+          })
+          .then(function(data) {
+            var topicLink = data._links.topic;
+            return $http.get(topicLink.href);
+          })
+          .then(function(resp) {
+            var topics = resp.data._embedded.topic,
+                nav = document.createElement('nav'),
+                ul = document.createElement('ul');
+            angular.forEach(topics, function(topic) {
+              var li = document.createElement('li'),
+                  a = document.createElement('a'),
+                  anchorText = document.createTextNode(topic.title);
+              a.href = topic._links.self.href;
+              a.appendChild(anchorText);
+              li.appendChild(a);
+              ul.appendChild(li);
+            });
+            nav.appendChild(ul);
+            elem.append(nav);
+          })
+          .catch(function() {
             state.set('is-error');
           });
       }

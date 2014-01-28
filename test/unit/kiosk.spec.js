@@ -43,7 +43,7 @@ describe('kiosk', function() {
       var directiveHtml = '<kiosk src="http://hellomean.com/kiosk"></kiosk>';
 
       $httpBackend.expectGET('http://hellomean.com/kiosk').respond(200, JSON.stringify(fixtures.rootResponse));
-      $httpBackend.expectGET(fixtures.rootResponse._links.topic.href).respond(200);
+      $httpBackend.expectGET(fixtures.rootResponse._links.topic.href).respond(200, JSON.stringify(fixtures.topicResponse));
       $rootScope.$apply(function() {
         $compile(directiveHtml)($rootScope);
       });
@@ -54,7 +54,7 @@ describe('kiosk', function() {
     it('should store the request result on the scope', function() {
       var directiveHtml = '<kiosk src="http://hellomean.com/kiosk"></kiosk>';
       $httpBackend.expectGET('http://hellomean.com/kiosk').respond(200, JSON.stringify(fixtures.rootResponse));
-      $httpBackend.expectGET(fixtures.rootResponse._links.topic.href).respond(200);
+      $httpBackend.expectGET(fixtures.rootResponse._links.topic.href).respond(200, JSON.stringify(fixtures.topicResponse));
       $rootScope.$apply(function() {
         $compile(directiveHtml)($rootScope);
       });
@@ -75,7 +75,7 @@ describe('kiosk', function() {
           element;
 
       $httpBackend.expectGET('http://hellomean.com/kiosk').respond(200, JSON.stringify(fixtures.rootResponse));
-      $httpBackend.expectGET(fixtures.rootResponse._links.topic.href).respond(200);
+      $httpBackend.expectGET(fixtures.rootResponse._links.topic.href).respond(200, JSON.stringify(fixtures.topicResponse));
       $rootScope.$apply(function() {
         element = $compile(directiveHtml)($rootScope);
         expect(element.hasClass('is-ready')).toBe(false);
@@ -104,6 +104,18 @@ describe('kiosk', function() {
 
   describe('get topics', function() {
     it('it should hit the topic rel to fetch topics', function() {
+      var directiveHtml = '<kiosk src="http://hellomean.com/kiosk"></kiosk>';
+
+      $httpBackend.whenGET('http://hellomean.com/kiosk').respond(200, JSON.stringify(fixtures.rootResponse));
+      $httpBackend.expectGET(fixtures.rootResponse["_links"].topic.href).respond(200, JSON.stringify(fixtures.topicResponse));
+      $rootScope.$apply(function() {
+        $compile(directiveHtml)($rootScope);
+      });
+
+      $httpBackend.flush();
+    });   
+    
+    it('it should hit the topic rel to fetch topics', function() {
       var directiveHtml = '<kiosk src="http://hellomean.com/kiosk"></kiosk>',
           element;
 
@@ -114,6 +126,12 @@ describe('kiosk', function() {
       });
 
       $httpBackend.flush();
+
+      angular.forEach(fixtures.topicResponse._embedded.topic, function(topic) {
+        var anchor = element.find('a[href="' + topic._links.self.href + '"]');
+        expect(anchor.length).toEqual(1);
+        expect(anchor.text()).toEqual(topic.title);
+      });
     });
   });
 });
