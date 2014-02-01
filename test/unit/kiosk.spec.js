@@ -24,11 +24,6 @@ describe('kiosk', function() {
       expect(getElement()[0].tagName).toEqual('DIV');
     }); 
 
-    it('should set the data url to what is in the src attribute', function() {
-      getElement();
-      expect($rootScope.dataUrl).toEqual('http://jasonandbrianrcool.com/api');
-    });
-
     it('should set error html if the src attribute is not set', function() {
       var directiveHtml = '<kiosk></kiosk>',
           element = $compile(directiveHtml)($rootScope),
