@@ -111,19 +111,18 @@ describe('kiosk', function() {
     });   
     
     it('it should hit the topic rel to fetch topics', function() {
-      var directiveHtml = '<kiosk src="http://hellomean.com/kiosk"></kiosk>',
-          element;
+      var directiveHtml = '<kiosk src="http://hellomean.com/kiosk"><kiosk-nav><h3>hello brian</h3></kiosk-nav></kiosk>',
+          element = angular.element(directiveHtml),
+          compiled;
 
       $httpBackend.whenGET('http://hellomean.com/kiosk').respond(200, JSON.stringify(fixtures.rootResponse));
       $httpBackend.expectGET(fixtures.rootResponse["_links"].topic.href).respond(200, JSON.stringify(fixtures.topicResponse));
       $rootScope.$apply(function() {
-        element = $compile(directiveHtml)($rootScope);
+        compiled = $compile(element)($rootScope);
       });
-
       $httpBackend.flush();
-
       angular.forEach(fixtures.topicResponse._embedded.topic, function(topic) {
-        var anchor = element.find('a[href="' + topic._links.self.href + '"]');
+        var anchor = compiled.find('a[href="' + topic._links.self.href + '"]');
         expect(anchor.length).toEqual(1);
         expect(anchor.text()).toEqual(topic.title);
       });

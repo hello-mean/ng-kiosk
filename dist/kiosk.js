@@ -5,24 +5,16 @@ angular.module('ng-kiosk', ['ng-kiosk.services'])
     return {
       restrict: 'E',
       controller: 'KioskController',
-      template: '<div class="is-initializing"></div>',
+      template: '<div class="is-initializing"><div ng-transclude></div></div>',
       replace: true,
+      transclude: true,
       link: function($scope, elem, attrs, ctrl) {
         var state = new State(elem, $scope);
         if (!attrs.src) {
           elem.html('<p><strong>ng-kiosk:src attribute not set</strong></p>');
           return;
         }
-        ctrl.getRoot(attrs.src, state)
-          .then(function(topics) {
-            var nav = angular.element('<nav><ul></ul></nav>');
-            angular.forEach(topics, function(topic) {
-              var tpl = '<li><a href="' + topic.href + '">' + topic.title + '</a></li>',
-                  item = angular.element(tpl);
-              nav.find('ul').append(item);
-            });
-            elem.append(nav);
-          });
+        ctrl.getRoot(attrs.src, state).then(ctrl.setTopics);
       }
     };
   }])
@@ -51,7 +43,19 @@ angular.module('ng-kiosk', ['ng-kiosk.services'])
         });
     };
 
-  }]);
+    this.setTopics = function(topics) {
+      $scope.topics = topics;
+    };
+
+  }])
+  .directive('kioskNav', function() {
+    return {
+      require: '^kiosk',
+      restrict: 'E',
+      replace: true,
+      template: '<nav><ul><li ng-repeat="topic in topics"><a href="{{topic.href}}">{{topic.title}}</a></li></ul></nav>'
+    };
+  });
 
 'use strict';
 
