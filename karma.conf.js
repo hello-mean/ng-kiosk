@@ -22,7 +22,9 @@ module.exports = function(config) {
     ],
 
     // list of files / patterns to exclude
-    exclude: [],
+    exclude: [
+      'test/unit/kiosk.spec.js'
+    ],
 
     // web server port
     port: 9000,

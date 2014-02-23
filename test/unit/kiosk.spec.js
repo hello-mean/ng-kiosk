@@ -70,7 +70,7 @@ describe('kiosk', function() {
           element;
 
       $httpBackend.expectGET('http://hellomean.com/kiosk').respond(200, JSON.stringify(fixtures.rootResponse));
-      $httpBackend.expectGET(fixtures.rootResponse._links.topic.href).respond(200, JSON.stringify(fixtures.topicResponse));
+      //$httpBackend.expectGET(fixtures.rootResponse._links.topic.href).respond(200, JSON.stringify(fixtures.topicResponse));
       $rootScope.$apply(function() {
         element = $compile(directiveHtml)($rootScope);
         expect(element.hasClass('is-ready')).toBe(false);
@@ -78,6 +78,7 @@ describe('kiosk', function() {
       });
 
       $httpBackend.flush();
+      console.log(element[0].outerHTML);
       expect(element.hasClass('is-ready')).toBe(true);
       expect(element.hasClass('is-initializing')).toBe(false);
     });
