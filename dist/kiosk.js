@@ -28,8 +28,6 @@ angular.module('ng-kiosk', [])
       throw new Error('kiosk src not set');
     }
     
-    $scope.state = 'is-initializing';
-
     $http.get($scope.src)
       .then(function(response) {
         $scope.setKiosk(response.data);
@@ -37,6 +35,10 @@ angular.module('ng-kiosk', [])
       })
       .then(function(response) {
         $scope.setTopics(response.data);
+        $scope.setState('is-ready');
+      })
+      .catch(function() {
+        $scope.setState('is-error');
       });
 
     $scope.setKiosk = function(kiosk) {
@@ -53,6 +55,7 @@ angular.module('ng-kiosk', [])
       $scope.$emit('kiosk:' + state);
     };
 
+    $scope.setState('is-initializing');
   }])
   .directive('kioskNav', function() {
     return {
