@@ -1,0 +1,44 @@
+{
+  "_links": {
+    "self": {"href": "<%= site %>/api/topic"},
+    "next": {"href": "<%= site %>/api/topic?page=2"},
+    "last": {"href": "<%= site %>/api/topic?page=2"}
+  },
+  "count": 10,
+  "page": 1,
+  "per_page": 5,
+  "_embedded": {
+    "topic": [
+      {
+        "_links": {
+          "self": {"href": "<%= site %>/api/topic/1"}
+        },
+        "title": "Stocks"
+      },
+      {
+        "_links": {
+          "self": {"href": "<%= site %>/api/topic/2"}
+        },
+        "title": "Weather"
+      },
+      {
+        "_links": {
+          "self": {"href": "<%= site %>/api/topic/3"}
+        },
+        "title": "Sports"
+      },
+      {
+        "_links": {
+          "self": {"href": "<%= site %>/api/topic/4"}
+        },
+        "title": "Food"
+      },
+      {
+        "_links": {
+          "self": {"href": "<%= site %>/api/topic/5"}
+        },
+        "title": "Finance"
+      }
+    ]
+  }
+}
