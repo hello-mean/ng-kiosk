@@ -56,9 +56,10 @@ describe('KioskController', function() {
       expect($scope.kiosk).toEqual(fixtures.rootResponse);
     });
 
-    it('should set the topics to the result of kiosk topics', function() {
-      expect($scope.topics).toEqual(fixtures.topicResponse);
-    });
+    it('should set the topics to the result of kiosk topics', inject(function(map) {
+      var mapped = map.topics(fixtures.topicResponse);
+      expect($scope.topics).toEqual(mapped);
+    }));
 
     it('should set the state to is-ready when topics are loaded', function () {
       expect($scope.state).toEqual('is-ready');

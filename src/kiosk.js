@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('ng-kiosk', [])
+angular.module('ng-kiosk', ['ng-kiosk.mapping'])
   .directive('kiosk', [function() {
     return {
       restrict: 'E',
@@ -23,7 +23,7 @@ angular.module('ng-kiosk', [])
       }
     };
   }])
-  .controller('KioskController', ['$scope', '$http', function($scope, $http) {
+  .controller('KioskController', ['$scope', '$http', 'map', function($scope, $http, map) {
     if (!$scope.src) {
       throw new Error('kiosk src not set');
     }
@@ -46,7 +46,8 @@ angular.module('ng-kiosk', [])
     };
 
     $scope.setTopics = function(topics) {
-      $scope.topics = topics;
+      $scope._topics = topics;
+      $scope.topics = map.topics(topics);
     };
 
     $scope.setState = function(state) {
