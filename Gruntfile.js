@@ -20,6 +20,19 @@ module.exports = function (grunt) {
         }]
       },
     },
+    html2js: {
+      dist: {
+        options: {
+          module: null, // no bundle module for all the html2js templates
+          base: '.'
+        },
+        files: [{
+          expand: true,
+          src: ['templates/**/*.html'],
+          ext: '.html.js'
+        }]
+      }
+    },
     jshint: {
       options: {
         jshintrc: '.jshintrc',
@@ -33,7 +46,7 @@ module.exports = function (grunt) {
     // but still available if needed
     concat: {
       dist: {
-        src:['src/kiosk.js', 'src/*.js', 'src/**/*.js'],
+        src:['templates/*.js', 'src/kiosk.js', 'src/*.js', 'src/**/*.js'],
         dest: 'dist/kiosk.js'
       }
     },
@@ -55,11 +68,13 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', [
+    'html2js',
     'karma'
   ]);
 
   grunt.registerTask('build', [
     'clean:dist',
+    'html2js',
     'concat',
     'uglify',
   ]);

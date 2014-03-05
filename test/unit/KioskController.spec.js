@@ -7,28 +7,18 @@ describe('KioskController', function() {
       $scope,
       $controller,
       $http,
+      setup,
       ctrl;
-
-  function setup($scope, config) {
-    config || (config = function() {
-      $http.expectGET($scope.src)
-        .respond(200, JSON.stringify(fixtures.rootResponse));
-      $http.expectGET(fixtures.rootResponse._links.topic.href)
-        .respond(200, JSON.stringify(fixtures.topicResponse));
-    });
-    $scope.src = 'http://hellomean.com/kiosk';
-    config();
-    $scope.$apply(function() {
-      $controller('KioskController', { $scope: $scope });
-    });
-    $http.flush(); 
-  };
 
   beforeEach(inject(function(_$rootScope_, _$httpBackend_, _$controller_) {
     $http = _$httpBackend_;
     $rootScope = _$rootScope_;
     $scope = _$rootScope_.$new();
     $controller = _$controller_;
+    setup = function($scope, config) { 
+      helpers.mockHttp($http, $controller)($scope, config);
+      $http.flush();
+    };
   }));
 
   it('should initialize state to "is-initializing"', function () {

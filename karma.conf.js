@@ -16,14 +16,14 @@ module.exports = function(config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'src/*.js',
       'src/**/*.js',
-      'test/unit/fixtures.js',
       'test/unit/*.spec.js',
-      'test/unit/**/*.spec.js'
+      'test/unit/*.js',
+      'test/unit/**/*.spec.js',
+      'templates/*.js'
     ],
 
     // list of files / patterns to exclude
     exclude: [
-      'test/unit/kiosk.spec.js'
     ],
 
     // web server port

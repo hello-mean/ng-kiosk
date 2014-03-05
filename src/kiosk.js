@@ -1,21 +1,21 @@
 'use strict';
 
-angular.module('ng-kiosk', ['ng-kiosk.mapping'])
+angular.module('ng-kiosk', [
+  'ng-kiosk.mapping',
+  'templates/kiosk.html',
+  'templates/kiosk-nav.html'
+])
   .directive('kiosk', [function() {
     return {
       restrict: 'E',
       controller: 'KioskController',
-      template: '<div class="is-initializing"><div ng-transclude></div></div>',
+      templateUrl: 'templates/kiosk.html',
       replace: true,
       transclude: true,
       scope: {
         src:'@'
       },
       link: function($scope, elem) {
-        if (!$scope.src) {
-          elem.html('<p><strong>ng-kiosk:src attribute not set</strong></p>');
-          return;
-        }
         $scope.$watch('state', function(newState, oldState) {
           elem.addClass(newState);
           elem.removeClass(oldState);
@@ -23,10 +23,12 @@ angular.module('ng-kiosk', ['ng-kiosk.mapping'])
       }
     };
   }])
-  .controller('KioskController', ['$scope', '$http', 'map', function($scope, $http, map) {
+  .controller('KioskController', ['$scope', '$http', 'map', '$q', function($scope, $http, map, $q) {
     if (!$scope.src) {
-      throw new Error('kiosk src not set');
+      throw new Error('kiosk src attribute not set');
     }
+
+    var deferredTopics = $q.defer();
     
     $http.get($scope.src)
       .then(function(response) {
@@ -48,12 +50,17 @@ angular.module('ng-kiosk', ['ng-kiosk.mapping'])
     $scope.setTopics = function(topics) {
       $scope._topics = topics;
       $scope.topics = map.topics(topics);
+      deferredTopics.resolve($scope.topics);
     };
 
     $scope.setState = function(state) {
       $scope.state = state;
       $scope.$broadcast('kiosk:' + state);
       $scope.$emit('kiosk:' + state);
+    };
+
+    this.getTopics = function() {
+      return deferredTopics.promise;
     };
 
     $scope.setState('is-initializing');
@@ -63,6 +70,11 @@ angular.module('ng-kiosk', ['ng-kiosk.mapping'])
       require: '^kiosk',
       restrict: 'E',
       replace: true,
-      template: '<nav><ul><li ng-repeat="topic in topics"><a href="{{topic.href}}">{{topic.title}}</a></li></ul></nav>'
+      templateUrl: 'templates/kiosk-nav.html',
+      link: function($scope, elem, attrs, kioskCtrl) {
+        kioskCtrl.getTopics().then(function(topics) {
+          $scope.topics = topics;
+        });
+      }
     };
   });
