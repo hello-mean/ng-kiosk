@@ -8,7 +8,10 @@ helpers.mockHttp = function ($http, $controller) {
           $http.expectGET($scope.src)
             .respond(200, JSON.stringify(fixtures.rootResponse));
           $http.expectGET(fixtures.rootResponse._links.topic.href)
-            .respond(200, JSON.stringify(fixtures.topicResponse));
+            .respond(200, JSON.stringify(fixtures.topicResponse));       
+          $http.expectGET(
+              fixtures.topicResponse._embedded.topic[0]._links.slide.href)
+            .respond(200, JSON.stringify(fixtures.slideResponse.topic1));
         });
         $scope.src = helpers.src;
         config();

@@ -10,6 +10,13 @@ angular.module('ng-kiosk.mapping', [])
             url: topic._links.self.href
           };
         });
+      },
+      slides: function(hal) {
+        return hal._embedded.slide.map(function(slide) {
+          return {
+            content: slide.content
+          };
+        });
       }
     };
   });

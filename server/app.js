@@ -35,6 +35,7 @@ app.get('/', function(req, res) {
 });
 app.get('/api', routes.index);
 app.get('/api/topic', routes.topic);
+app.get('/api/topic/1/slide', routes.slide);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

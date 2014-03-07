@@ -13,6 +13,7 @@ module.exports = function(config) {
     files: [
       'bower_components/jquery/jquery.min.js',
       'bower_components/angular/angular.js',
+      'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'src/*.js',
       'src/**/*.js',

@@ -51,6 +51,11 @@ describe('KioskController', function() {
       expect($scope.topics).toEqual(mapped);
     }));
 
+    it('should set the slide to the slide of the first topic', inject(function(map) {
+      var mapped = map.slides(fixtures.slideResponse.topic1);
+      expect($scope.currentSlide).toEqual(mapped[0]);
+    }));
+
     it('should set the state to is-ready when topics are loaded', function () {
       expect($scope.state).toEqual('is-ready');
     });

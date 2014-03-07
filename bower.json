@@ -2,7 +2,8 @@
   "name": "ng-kiosk",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "~1.2.0"
+    "angular": "~1.2.0",
+    "angular-sanitize": "~1.2.0"
   },
   "devDependencies": {
     "jquery": "~2.0.0",

@@ -12,13 +12,16 @@ angular.module("templates/kiosk-nav.html", []).run(["$templateCache", function($
 angular.module("templates/kiosk.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("templates/kiosk.html",
     "<div>\n" +
+    "        <div ng-bind-html=\"currentSlide.content\"></div>\n" +
     "	<div ng-transclude></div>\n" +
-    "</div>");
+    "</div>\n" +
+    "");
 }]);
 
 'use strict';
 
 angular.module('ng-kiosk', [
+  'ngSanitize',
   'ng-kiosk.mapping',
   'templates/kiosk.html',
   'templates/kiosk-nav.html'
@@ -55,6 +58,10 @@ angular.module('ng-kiosk', [
       })
       .then(function(response) {
         $scope.setTopics(response.data);
+        return $http.get($scope._topics._embedded.topic[0]._links.slide.href);
+      })
+      .then(function(response) {
+        $scope.setSlides(response.data);
         $scope.setState('is-ready');
       })
       .catch(function() {
@@ -69,6 +76,12 @@ angular.module('ng-kiosk', [
       $scope._topics = topics;
       $scope.topics = map.topics(topics);
       deferredTopics.resolve($scope.topics);
+    };
+
+    $scope.setSlides = function(slides) {
+      $scope._slides = slides;
+      $scope.slides = map.slides(slides);
+      $scope.currentSlide = $scope.slides[0];
     };
 
     $scope.setState = function(state) {
@@ -107,6 +120,13 @@ angular.module('ng-kiosk.mapping', [])
           return {
             title: topic.title,
             url: topic._links.self.href
+          };
+        });
+      },
+      slides: function(hal) {
+        return hal._embedded.slide.map(function(slide) {
+          return {
+            content: slide.content
           };
         });
       }
