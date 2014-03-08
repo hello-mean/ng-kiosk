@@ -1,4 +1,7 @@
 <div ng-class="state">
-    <div ng-bind-html="currentSlide.content"></div>
+	<ul>
+		<li ng-repeat="slide in slides" ng-bind-html="slide.content">
+		</li>
+	</ul>
 	<div ng-transclude></div>
 </div>

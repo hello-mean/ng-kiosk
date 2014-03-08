@@ -69,7 +69,21 @@ window.fixtures.slideResponse = {
             "self": {"href": "http://hellomean.com/kiosk/slide/1"},
             "topic": {"href": "http://hellomean.com/kiosk/topic/1"}
           },
-          "content": "<img alt='stocks' src='http://1.bp.blogspot.com/-xi9BdsGwlk0/Uj2-j3vYvUI/AAAAAAAAAhA/lvDPLE6DM5A/s1600/stock-chart-blue.png' />"
+          "content": "<img alt='stocks' src='http://upload.wikimedia.org/wikipedia/commons/b/b8/Sao_Paulo_Stock_Exchange.jpg' />"
+       },
+       {
+          "_links": {
+            "self": {"href": "http://hellomean.com/kiosk/slide/2"},
+            "topic": {"href": "http://hellomean.com/kiosk/topic/1"}
+          },
+          "content": "<img alt='stocks' src='http://s3.freefoto.com/images/04/03/04_03_1_web.jpg' />"
+       },
+       {
+          "_links": {
+            "self": {"href": "http://hellomean.com/kiosk/slide/3"},
+            "topic": {"href": "http://hellomean.com/kiosk/topic/1"}
+          },
+          "content": "<img alt='stocks' src='http://upload.wikimedia.org/wikipedia/commons/2/28/Borussia_Dortmund_GmbH_%26_Co._KGaA_Economic_Share_Price_and_Stock_Market_Volume.png' />"
        }
       ]
     }

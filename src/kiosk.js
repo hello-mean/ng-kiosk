@@ -55,7 +55,6 @@ angular.module('ng-kiosk', [
     $scope.setSlides = function(slides) {
       $scope._slides = slides;
       $scope.slides = map.slides(slides);
-      $scope.currentSlide = $scope.slides[0];
     };
 
     $scope.setState = function(state) {
