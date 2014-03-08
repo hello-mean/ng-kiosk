@@ -14,7 +14,7 @@ helpers.mockHttp = function ($http, $controller) {
             .respond(200, JSON.stringify(fixtures.slideResponse.topic1));
         });
         $scope.src = helpers.src;
-        config();
+        config($http);
         $controller && $scope.$apply(function() {
           $controller('KioskController', { $scope: $scope });
         });

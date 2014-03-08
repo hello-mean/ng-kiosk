@@ -11,8 +11,8 @@ angular.module("templates/kiosk-nav.html", []).run(["$templateCache", function($
 
 angular.module("templates/kiosk.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("templates/kiosk.html",
-    "<div>\n" +
-    "        <div ng-bind-html=\"currentSlide.content\"></div>\n" +
+    "<div ng-class=\"state\">\n" +
+    "    <div ng-bind-html=\"currentSlide.content\"></div>\n" +
     "	<div ng-transclude></div>\n" +
     "</div>\n" +
     "");
@@ -35,12 +35,6 @@ angular.module('ng-kiosk', [
       transclude: true,
       scope: {
         src:'@'
-      },
-      link: function($scope, elem) {
-        $scope.$watch('state', function(newState, oldState) {
-          elem.addClass(newState);
-          elem.removeClass(oldState);
-        });
       }
     };
   }])

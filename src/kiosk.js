@@ -15,12 +15,6 @@ angular.module('ng-kiosk', [
       transclude: true,
       scope: {
         src:'@'
-      },
-      link: function($scope, elem) {
-        $scope.$watch('state', function(newState, oldState) {
-          elem.addClass(newState);
-          elem.removeClass(oldState);
-        });
       }
     };
   }])

@@ -13,12 +13,17 @@ describe('kiosk', function() {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $httpBackend = _$httpBackend_;
-    helpers.mockHttp($httpBackend)($rootScope);
   }));
 
-  function getElement() {
-    var directiveHtml = '<kiosk src="' + helpers.src + '"><kiosk-nav /></kiosk>',
-        element = $compile(directiveHtml)($rootScope);
+  function getElement(config) {
+    helpers.mockHttp($httpBackend)($rootScope, config);
+    var element;
+
+    $rootScope.$apply(function() {
+      var directiveHtml = '<kiosk src="' + helpers.src + '"><kiosk-nav /></kiosk>';
+      element = $compile(directiveHtml)($rootScope);
+    });
+
     return element;
   };
 
@@ -31,6 +36,29 @@ describe('kiosk', function() {
         expect(anchor.length).toEqual(1);
         expect(anchor.text()).toEqual(topic.title);
       });
+    });
+  });
+
+  describe('state class', function() {
+    it('should set state to is-initializing by default', function () {
+      var element = getElement();
+      expect(element.hasClass('is-initializing')).toBe(true);
+    });
+
+    it('should set state to is-ready after successful request', function () {
+      var element = getElement();
+      $httpBackend.flush();
+      expect(element.hasClass('is-ready')).toBe(true);
+    });
+
+    it('should set state to is-error after unsuccessful request', function () {
+      var element = getElement(function($http){
+        $http.expectGET(helpers.src)
+            .respond(403, JSON.stringify("I Am A Teapot."));
+      });
+
+      $httpBackend.flush();
+      expect(element.hasClass('is-error')).toBe(true);
     });
   });
 });
