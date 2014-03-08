@@ -2,7 +2,7 @@ angular.module("templates/kiosk-nav.html", []).run(["$templateCache", function($
   $templateCache.put("templates/kiosk-nav.html",
     "<nav>\n" +
     "	<ul>\n" +
-    "		<li ng-repeat=\"topic in topics\">\n" +
+    "		<li ng-repeat=\"topic in coordinator.topics\">\n" +
     "			<a href=\"{{topic.url}}\">{{topic.title}}</a>\n" +
     "		</li>\n" +
     "	</ul>\n" +
@@ -13,7 +13,7 @@ angular.module("templates/kiosk.html", []).run(["$templateCache", function($temp
   $templateCache.put("templates/kiosk.html",
     "<div ng-class=\"state\">\n" +
     "	<ul>\n" +
-    "		<li ng-repeat=\"slide in slides\" ng-bind-html=\"slide.content\">\n" +
+    "		<li ng-repeat=\"slide in coordinator.slides\" ng-bind-html=\"slide.content\">\n" +
     "		</li>\n" +
     "	</ul>\n" +
     "	<div ng-transclude></div>\n" +
@@ -41,12 +41,13 @@ angular.module('ng-kiosk', [
       }
     };
   }])
-  .controller('KioskController', ['$scope', '$http', 'map', '$q', function($scope, $http, map, $q) {
+  .controller('KioskController', ['$scope', '$http', 'map', 'Coordinator', function($scope, $http, map, coordinator) {
+
+    $scope.coordinator = coordinator;
+
     if (!$scope.src) {
       throw new Error('kiosk src attribute not set');
     }
-
-    var deferredTopics = $q.defer();
     
     $http.get($scope.src)
       .then(function(response) {
@@ -71,13 +72,12 @@ angular.module('ng-kiosk', [
 
     $scope.setTopics = function(topics) {
       $scope._topics = topics;
-      $scope.topics = map.topics(topics);
-      deferredTopics.resolve($scope.topics);
+      $scope.coordinator.setTopics(map.topics(topics));
     };
 
     $scope.setSlides = function(slides) {
       $scope._slides = slides;
-      $scope.slides = map.slides(slides);
+      $scope.coordinator.setSlides(map.slides(slides));
     };
 
     $scope.setState = function(state) {
@@ -86,26 +86,32 @@ angular.module('ng-kiosk', [
       $scope.$emit('kiosk:' + state);
     };
 
-    this.getTopics = function() {
-      return deferredTopics.promise;
-    };
-
     $scope.setState('is-initializing');
   }])
-  .directive('kioskNav', function() {
+  .directive('kioskNav', ['Coordinator', function(Coordinator) {
     return {
       require: '^kiosk',
       restrict: 'E',
       replace: true,
-      templateUrl: 'templates/kiosk-nav.html',
-      link: function($scope, elem, attrs, kioskCtrl) {
-        kioskCtrl.getTopics().then(function(topics) {
-          $scope.topics = topics;
-        });
+      controller: ['$scope', function($scope) {
+        $scope.coordinator = Coordinator;
+      }],
+      templateUrl: 'templates/kiosk-nav.html'
+    };
+  }]);
+
+'use strict';
+angular.module('ng-kiosk')
+  .factory('Coordinator', [function() {
+    return {
+      setTopics: function(topics) {
+        this.topics = topics;
+      },
+      setSlides: function(slides) {
+        this.slides = slides;
       }
     };
-  });
-
+  }]);
 'use strict';
 
 angular.module('ng-kiosk.mapping', [])
