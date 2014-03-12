@@ -15,6 +15,9 @@ angular.module('ng-kiosk')
       },
       addSlide: function(slide) {
         $scope.slides.push(slide);
+      },
+      setConfiguration: function(config) {
+        $scope.configuration = config;
       }
     };
 

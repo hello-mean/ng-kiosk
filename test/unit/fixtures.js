@@ -4,7 +4,8 @@ window.fixtures.rootResponse = {
   "_links": {
     "self": {"href": "http://hellomean.com/kiosk"},
     "topic": {"href": "http://hellomean.com/kiosk/topic"}
-  }
+  },
+  'title': 'Such Kiosk'
 };
 
 window.fixtures.topicResponse = {       

@@ -17,6 +17,12 @@ angular.module('ng-kiosk.mapping', [])
             content: slide.content
           };
         });
+      },
+      configuration: function(hal) {
+        var copy = angular.copy(hal);
+        delete copy._links;
+        delete copy._embedded;
+        return copy;
       }
     };
   });

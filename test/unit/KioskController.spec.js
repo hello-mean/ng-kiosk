@@ -42,8 +42,8 @@ describe('KioskController', function() {
       setup($scope);
     });
     
-    it('should set the kiosk to the result of src', function() {
-      expect($scope._kiosk).toEqual(fixtures.rootResponse);
+    it('should set the _root to the result of src', function() {
+      expect($scope._root).toEqual(fixtures.rootResponse);
     });
 
     it('should set the topics to the result of kiosk topics', inject(function(map) {

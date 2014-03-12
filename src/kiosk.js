@@ -28,8 +28,8 @@ angular.module('ng-kiosk', [
     
     $http.get($scope.src)
       .then(function(response) {
-        $scope.setKiosk(response.data);
-        return $http.get($scope._kiosk._links.topic.href);
+        $scope.setRoot(response.data);
+        return $http.get($scope._root._links.topic.href);
       })
       .then(function(response) {
         $scope.setTopics(response.data);
@@ -43,8 +43,9 @@ angular.module('ng-kiosk', [
         $scope.setState('is-error');
       });
 
-    $scope.setKiosk = function(kiosk) {
-      $scope._kiosk = kiosk;
+    $scope.setRoot = function(root) {
+      $scope._root = root;
+      $scope.kiosk.safe.setConfiguration(map.configuration(root));
     };
 
     $scope.setTopics = function(topics) {

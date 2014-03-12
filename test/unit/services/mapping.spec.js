@@ -20,4 +20,11 @@ describe('mapping', function() {
       }
     }));
   });
+
+  describe('#map.configuration()', function() {
+    it('should map configuration data from a response', inject(function (map) {
+      var config = map.configuration(fixtures.rootResponse);
+      expect(config.title).toEqual(fixtures.rootResponse.title);
+    }));
+  });
 });
