@@ -2,11 +2,12 @@ angular.module("templates/kiosk-nav.html", []).run(["$templateCache", function($
   $templateCache.put("templates/kiosk-nav.html",
     "<nav>\n" +
     "	<ul>\n" +
-    "		<li ng-repeat=\"topic in coordinator.topics\">\n" +
+    "		<li ng-repeat=\"topic in kiosk.topics\">\n" +
     "			<a href=\"{{topic.url}}\">{{topic.title}}</a>\n" +
     "		</li>\n" +
     "	</ul>\n" +
-    "</nav>");
+    "</nav>\n" +
+    "");
 }]);
 
 angular.module("templates/kiosk.html", []).run(["$templateCache", function($templateCache) {
@@ -41,9 +42,9 @@ angular.module('ng-kiosk', [
       }
     };
   }])
-  .controller('KioskController', ['$scope', '$http', 'map', 'Coordinator', function($scope, $http, map, coordinator) {
+  .controller('KioskController', ['$scope', '$http', 'map', 'Kiosk', function($scope, $http, map, kiosk) {
 
-    $scope.coordinator = coordinator;
+    $scope.kiosk = kiosk;
 
     if (!$scope.src) {
       throw new Error('kiosk src attribute not set');
@@ -52,7 +53,7 @@ angular.module('ng-kiosk', [
     $http.get($scope.src)
       .then(function(response) {
         $scope.setKiosk(response.data);
-        return $http.get($scope.kiosk._links.topic.href);
+        return $http.get($scope._kiosk._links.topic.href);
       })
       .then(function(response) {
         $scope.setTopics(response.data);
@@ -67,17 +68,17 @@ angular.module('ng-kiosk', [
       });
 
     $scope.setKiosk = function(kiosk) {
-      $scope.kiosk = kiosk;
+      $scope._kiosk = kiosk;
     };
 
     $scope.setTopics = function(topics) {
       $scope._topics = topics;
-      $scope.coordinator.setTopics(map.topics(topics));
+      $scope.kiosk.safe.setTopics(map.topics(topics));
     };
 
     $scope.setSlides = function(slides) {
       $scope._slides = slides;
-      $scope.coordinator.setSlides(map.slides(slides));
+      $scope.kiosk.safe.setSlides(map.slides(slides));
     };
 
     $scope.setState = function(state) {
@@ -88,13 +89,13 @@ angular.module('ng-kiosk', [
 
     $scope.setState('is-initializing');
   }])
-  .directive('kioskNav', ['Coordinator', function(Coordinator) {
+  .directive('kioskNav', ['Kiosk', function(Kiosk) {
     return {
       require: '^kiosk',
       restrict: 'E',
       replace: true,
       controller: ['$scope', function($scope) {
-        $scope.coordinator = Coordinator;
+        $scope.kiosk = Kiosk;
       }],
       templateUrl: 'templates/kiosk-nav.html'
     };
@@ -102,16 +103,64 @@ angular.module('ng-kiosk', [
 
 'use strict';
 angular.module('ng-kiosk')
-  .factory('Coordinator', [function() {
-    return {
+  .factory('Kiosk', ['$rootScope', function($rootScope) {
+    var $scope = $rootScope.$new();
+
+    /**
+     * Define functions that do not trigger a digest
+     */
+    var safe = {
       setTopics: function(topics) {
-        this.topics = topics;
+        $scope.topics = topics;
       },
       setSlides: function(slides) {
-        this.slides = slides;
+        $scope.slides = slides;
+      },
+      addSlide: function(slide) {
+        $scope.slides.push(slide);
       }
     };
+
+    var kiosk = {};
+    /**
+     * Create an unsafe copy of a safe function - i.ie
+     * a function that triggers a digest
+     */
+    function createAppliedFunction(key) {
+      return function(/** args **/) {
+        var args = arguments;
+        $scope.$apply(function() {
+          safe[key].apply(kiosk, args);
+        });
+      };
+    }
+
+    /**
+     * Create the default kiosk interface
+     */
+    for(var k in safe) {
+      kiosk[k] = createAppliedFunction(k);
+    }
+
+    /**
+     * Add the safe namespace for non applied functions
+     */
+    kiosk.safe = safe;
+
+
+    Object.defineProperty(kiosk, 'topics', {
+      get: function() {
+        return $scope.topics;
+      }
+    });
+    Object.defineProperty(kiosk, 'slides', {
+      get: function() {
+        return $scope.slides;
+      }
+    });
+    return kiosk;
   }]);
+
 'use strict';
 
 angular.module('ng-kiosk.mapping', [])
