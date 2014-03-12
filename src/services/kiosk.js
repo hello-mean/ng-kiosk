@@ -21,7 +21,9 @@ angular.module('ng-kiosk')
       }
     };
 
-    var kiosk = {};
+    var kiosk = {
+      scope: $scope
+    };
     /**
      * Create an unsafe copy of a safe function - i.ie
      * a function that triggers a digest
