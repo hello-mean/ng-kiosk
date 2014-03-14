@@ -1,0 +1,18 @@
+body {
+  background-color:#efefef;
+}
+
+.kiosk {
+  height:500px;
+  width:640px;
+  overflow:hidden;
+  margin:0 auto;
+}
+
+.kiosk-slides {
+  width:300%;
+}
+
+.kiosk-slide {
+  display:inline-block;
+}

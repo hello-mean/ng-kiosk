@@ -60,6 +60,22 @@ module.exports = function (grunt) {
         }
       }
     },
+    watch: {
+      styles: {
+        files:['styles/*.css'],
+        tasks:['copy'],
+        options: {
+          spawn: false
+        }
+      }
+    },
+    copy: {
+      dist: {
+        files:[
+          {src: ['styles/*.css'], dest: 'dist/', flatten:true, expand:true}
+        ]
+      }
+    },
     karma: {
       unit: {
         configFile: "karma.conf.js"
@@ -77,6 +93,7 @@ module.exports = function (grunt) {
     'html2js',
     'concat',
     'uglify',
+    'copy'
   ]);
 
   grunt.registerTask('default', [

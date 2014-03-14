@@ -1,7 +1,7 @@
-<div ng-class="state">
-	<ul>
-		<li ng-repeat="slide in coordinator.slides" ng-bind-html="slide.content">
-		</li>
-	</ul>
-	<div ng-transclude></div>
+<div class="kiosk" ng-class="state">
+    <ul class="kiosk-slides">
+        <li class="kiosk-slide" ng-repeat="slide in kiosk.slides" ng-bind-html="slide.content">
+        </li>
+    </ul>
+    <div ng-transclude></div>
 </div>
