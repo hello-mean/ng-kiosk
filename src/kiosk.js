@@ -66,6 +66,11 @@ angular.module('ng-kiosk', [
 
     $scope.setState('is-initializing');
   }])
+  .controller('SlideController', ['$scope', 'Kiosk', function($scope, Kiosk) {
+    $scope.isCurrentSlide = function() {
+      return $scope.slide === Kiosk.slides.current;
+    };
+  }])
   .directive('kioskNav', ['Kiosk', function(Kiosk) {
     return {
       require: '^kiosk',

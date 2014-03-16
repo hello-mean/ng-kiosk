@@ -51,9 +51,14 @@ describe('KioskController', function() {
       expect($scope.kiosk.topics).toEqual(mapped);
     }));
 
-    it('should set the slide to the slide of the first topic', inject(function(map) {
-      var mapped = map.slides(fixtures.slideResponse.topic1);
-      expect($scope.kiosk.slides).toEqual(mapped);
+    it('should set the slides to the slides of the first topic', inject(function(map) {
+      var mapped = map.slides(fixtures.slideResponse.topic1),
+          slides = [];
+      //filter out object properties and just get array entries    
+      for (var i = 0; i < $scope.kiosk.slides.length; i++) {
+        slides.push($scope.kiosk.slides[i]);
+      }
+      expect(slides).toEqual(mapped);
     }));
 
     it('should set the state to is-ready when topics are loaded', function () {

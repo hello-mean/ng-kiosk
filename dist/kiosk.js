@@ -14,7 +14,7 @@ angular.module("templates/kiosk.html", []).run(["$templateCache", function($temp
   $templateCache.put("templates/kiosk.html",
     "<div class=\"kiosk\" ng-class=\"state\">\n" +
     "    <ul class=\"kiosk-slides\">\n" +
-    "        <li class=\"kiosk-slide\" ng-repeat=\"slide in kiosk.slides\" ng-bind-html=\"slide.content\">\n" +
+    "        <li class=\"kiosk-slide\" ng-repeat=\"slide in kiosk.slides\" ng-bind-html=\"slide.content\" ng-controller=\"SlideController\" ng-show=\"isCurrent()\">\n" +
     "        </li>\n" +
     "    </ul>\n" +
     "    <div ng-transclude></div>\n" +
@@ -90,6 +90,11 @@ angular.module('ng-kiosk', [
 
     $scope.setState('is-initializing');
   }])
+  .controller('SlideController', ['$scope', 'Kiosk', function($scope, Kiosk) {
+    $scope.isCurrentSlide = function() {
+      return $scope.slide === Kiosk.slides.current;
+    };
+  }])
   .directive('kioskNav', ['Kiosk', function(Kiosk) {
     return {
       require: '^kiosk',
@@ -107,6 +112,14 @@ angular.module('ng-kiosk')
   .factory('Kiosk', ['$rootScope', function($rootScope) {
     var $scope = $rootScope.$new();
 
+    function setCurrentSlide(index) {
+      if (!$scope.slides[index]) {
+        throw new Error('No slide at index ' + index);
+      }
+      $scope.slides.index = index;
+      $scope.slides.current = $scope.slides[index];
+    }
+
     /**
      * Define functions that do not trigger a digest
      */
@@ -116,13 +129,15 @@ angular.module('ng-kiosk')
       },
       setSlides: function(slides) {
         $scope.slides = slides;
+        setCurrentSlide(0);
       },
       addSlide: function(slide) {
         $scope.slides.push(slide);
       },
       setConfiguration: function(config) {
         $scope.configuration = config;
-      }
+      },
+      setCurrentSlide: setCurrentSlide
     };
 
     var kiosk = {

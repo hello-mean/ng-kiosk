@@ -91,3 +91,10 @@ window.fixtures.slideResponse = {
   }
 };
 
+window.fixtures.slides = [
+  { content: 'I am' },
+  { content: ' the very' },
+  { content: ' model of' },
+  { content: ' a modern' },
+  { content: ' major general'}
+];
