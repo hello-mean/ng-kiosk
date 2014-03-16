@@ -137,7 +137,17 @@ angular.module('ng-kiosk')
       setConfiguration: function(config) {
         $scope.configuration = config;
       },
-      setCurrentSlide: setCurrentSlide
+      setCurrentSlide: setCurrentSlide,
+      next: function() {
+        var last = $scope.slides.length - 1,
+            index = ($scope.slides.index === last) ? 0 : $scope.slides.index + 1;
+        setCurrentSlide(index);
+      },
+      prev: function() {
+        var prev = $scope.slides.index - 1,
+            index = ($scope.slides.index === 0) ? $scope.slides.length - 1 : prev;
+        setCurrentSlide(index);
+      }
     };
 
     var kiosk = {

@@ -5,6 +5,7 @@ describe('Kiosk', function() {
   
   beforeEach(inject(function(Kiosk) {
     kiosk = Kiosk;
+    kiosk.setSlides(fixtures.slides);
   }));
 
   describe('.safe', function() {
@@ -46,9 +47,6 @@ describe('Kiosk', function() {
   });
 
   describe('#setCurrentSlide()', function() {
-    beforeEach(function() {
-      kiosk.setSlides(fixtures.slides);
-    });
 
     it('should set the index to the passed in index', function() {
       kiosk.setCurrentSlide(1);
@@ -68,4 +66,32 @@ describe('Kiosk', function() {
     });
   });
 
+  describe('#next()', function() {
+    
+    it('should set the current slide to the next available', function() {
+      kiosk.next();
+      expect(kiosk.scope.slides.index).toBe(1);
+    });
+
+    it('should rewind to index 0 when called on last slide', function() {
+      kiosk.setCurrentSlide(fixtures.slides.length - 1);
+      kiosk.next();
+      expect(kiosk.scope.slides.index).toBe(0);
+    });
+  });
+
+  describe('#prev()', function() {
+    
+    it('should set the current slide to the previous', function() {
+      kiosk.setCurrentSlide(2);
+      kiosk.prev();
+      expect(kiosk.scope.slides.index).toBe(1);
+    });
+
+    it('should forward to last index when called on first slide', function() {
+      kiosk.setCurrentSlide(0);
+      kiosk.prev();
+      expect(kiosk.scope.slides.index).toBe(fixtures.slides.length - 1);
+    });
+  });
 });
