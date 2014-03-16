@@ -14,7 +14,8 @@ angular.module('ng-kiosk.mapping', [])
       slides: function(hal) {
         return hal._embedded.slide.map(function(slide) {
           return {
-            content: slide.content
+            content: slide.content,
+            id: slide.id
           };
         });
       },

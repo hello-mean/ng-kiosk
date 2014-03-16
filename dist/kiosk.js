@@ -1,12 +1,18 @@
 angular.module("templates/kiosk-nav.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("templates/kiosk-nav.html",
-    "<nav>\n" +
-    "	<ul>\n" +
-    "		<li ng-repeat=\"topic in kiosk.topics\">\n" +
-    "			<a href=\"{{topic.url}}\">{{topic.title}}</a>\n" +
-    "		</li>\n" +
-    "	</ul>\n" +
-    "</nav>\n" +
+    "<div>\n" +
+    "    <nav>\n" +
+    "        <ul>\n" +
+    "            <li ng-repeat=\"topic in kiosk.topics\">\n" +
+    "                <a href=\"{{topic.url}}\">{{topic.title}}</a>\n" +
+    "            </li>\n" +
+    "        </ul>\n" +
+    "    </nav>\n" +
+    "    <div>\n" +
+    "        <button ng-click=\"kiosk.safe.prev()\" type=\"button\">Prev</button>\n" +
+    "        <button ng-click=\"kiosk.safe.next()\" type=\"button\">Next</button>\n" +
+    "    </div>\n" +
+    "</div>\n" +
     "");
 }]);
 
@@ -14,7 +20,7 @@ angular.module("templates/kiosk.html", []).run(["$templateCache", function($temp
   $templateCache.put("templates/kiosk.html",
     "<div class=\"kiosk\" ng-class=\"state\">\n" +
     "    <ul class=\"kiosk-slides\">\n" +
-    "        <li class=\"kiosk-slide\" ng-repeat=\"slide in kiosk.slides\" ng-bind-html=\"slide.content\" ng-controller=\"SlideController\" ng-show=\"isCurrent()\">\n" +
+    "        <li class=\"kiosk-slide\" ng-repeat=\"slide in kiosk.slides\" ng-bind-html=\"slide.content\" ng-controller=\"SlideController\" ng-show=\"isCurrentSlide()\">\n" +
     "        </li>\n" +
     "    </ul>\n" +
     "    <div ng-transclude></div>\n" +
@@ -92,7 +98,7 @@ angular.module('ng-kiosk', [
   }])
   .controller('SlideController', ['$scope', 'Kiosk', function($scope, Kiosk) {
     $scope.isCurrentSlide = function() {
-      return $scope.slide === Kiosk.slides.current;
+      return $scope.slide.id === Kiosk.slides.current.id;
     };
   }])
   .directive('kioskNav', ['Kiosk', function(Kiosk) {
@@ -208,7 +214,8 @@ angular.module('ng-kiosk.mapping', [])
       slides: function(hal) {
         return hal._embedded.slide.map(function(slide) {
           return {
-            content: slide.content
+            content: slide.content,
+            id: slide.id
           };
         });
       },

@@ -17,6 +17,7 @@ describe('mapping', function() {
       var slides = map.slides(fixtures.slideResponse.topic1);
       for (var i = 0, embedded = fixtures.slideResponse.topic1._embedded.slide; i < embedded.length; i++) {
        expect(slides[i].content).toEqual(embedded[i].content); 
+       expect(slides[i].id).toEqual(embedded[i].id);
       }
     }));
   });

@@ -1,6 +1,6 @@
 <div class="kiosk" ng-class="state">
     <ul class="kiosk-slides">
-        <li class="kiosk-slide" ng-repeat="slide in kiosk.slides" ng-bind-html="slide.content" ng-controller="SlideController" ng-show="isCurrent()">
+        <li class="kiosk-slide" ng-repeat="slide in kiosk.slides" ng-bind-html="slide.content" ng-controller="SlideController" ng-show="isCurrentSlide()">
         </li>
     </ul>
     <div ng-transclude></div>

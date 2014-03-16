@@ -68,7 +68,7 @@ angular.module('ng-kiosk', [
   }])
   .controller('SlideController', ['$scope', 'Kiosk', function($scope, Kiosk) {
     $scope.isCurrentSlide = function() {
-      return $scope.slide === Kiosk.slides.current;
+      return $scope.slide.id === Kiosk.slides.current.id;
     };
   }])
   .directive('kioskNav', ['Kiosk', function(Kiosk) {
