@@ -52,6 +52,15 @@ angular.module('ng-kiosk', [
 
     $scope.kiosk = kiosk;
 
+    $scope.$watch('kiosk.topics.current', function(newValue, oldValue) {
+      if (!oldValue || !$scope._topics) { return; }
+      var topic = $scope._topics._embedded.topic.reduce(function(r, t) {
+        if (t._links.self.href === newValue.url) { return t; }
+        return r;
+      });
+      if (topic) { $http.get(topic._links.slide.href); }
+    });
+
     if (!$scope.src) {
       throw new Error('kiosk src attribute not set');
     }
@@ -117,7 +126,7 @@ angular.module('ng-kiosk', [
 angular.module('ng-kiosk')
   .factory('Kiosk', ['$rootScope', function($rootScope) {
     var $scope = $rootScope.$new();
-     
+    
     /**
      * Define functions that do not trigger a digest
      */
@@ -165,8 +174,9 @@ angular.module('ng-kiosk')
     var kiosk = {
       scope: $scope
     };
+
     /**
-     * Create an unsafe copy of a safe function - i.ie
+     * Create an unsafe copy of a safe function - i.e
      * a function that triggers a digest
      */
     function createAppliedFunction(key) {

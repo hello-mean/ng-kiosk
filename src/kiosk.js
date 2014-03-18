@@ -22,6 +22,15 @@ angular.module('ng-kiosk', [
 
     $scope.kiosk = kiosk;
 
+    $scope.$watch('kiosk.topics.current', function(newValue, oldValue) {
+      if (!oldValue || !$scope._topics) { return; }
+      var topic = $scope._topics._embedded.topic.reduce(function(r, t) {
+        if (t._links.self.href === newValue.url) { return t; }
+        return r;
+      });
+      if (topic) { $http.get(topic._links.slide.href); }
+    });
+
     if (!$scope.src) {
       throw new Error('kiosk src attribute not set');
     }

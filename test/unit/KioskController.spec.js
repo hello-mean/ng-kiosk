@@ -34,6 +34,17 @@ describe('KioskController', function() {
     }).toThrow();
   });
 
+  it('should load new slides when a topic changes', function() {
+    var $scope = $rootScope.$new();
+    setup($scope);
+    $http.expectGET(fixtures.topicResponse._embedded.topic[1]._links.slide.href)
+      .respond(200);
+    $scope.$apply(function() {
+      $scope.kiosk.safe.setCurrentTopic(1);
+    });
+    $http.flush();
+  });
+
   describe('data initialization', function() {
     var $scope;
 

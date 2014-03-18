@@ -2,7 +2,7 @@
 angular.module('ng-kiosk')
   .factory('Kiosk', ['$rootScope', function($rootScope) {
     var $scope = $rootScope.$new();
-     
+    
     /**
      * Define functions that do not trigger a digest
      */
@@ -50,8 +50,9 @@ angular.module('ng-kiosk')
     var kiosk = {
       scope: $scope
     };
+
     /**
-     * Create an unsafe copy of a safe function - i.ie
+     * Create an unsafe copy of a safe function - i.e
      * a function that triggers a digest
      */
     function createAppliedFunction(key) {
