@@ -118,14 +118,7 @@ angular.module('ng-kiosk')
   .factory('Kiosk', ['$rootScope', function($rootScope) {
     var $scope = $rootScope.$new();
 
-    function setCurrentSlide(index) {
-      if (!$scope.slides[index]) {
-        throw new Error('No slide at index ' + index);
-      }
-      $scope.slides.index = index;
-      $scope.slides.current = $scope.slides[index];
-    }
-
+  
     /**
      * Define functions that do not trigger a digest
      */
@@ -135,7 +128,7 @@ angular.module('ng-kiosk')
       },
       setSlides: function(slides) {
         $scope.slides = slides;
-        setCurrentSlide(0);
+        safe.setCurrentSlide(0);
       },
       addSlide: function(slide) {
         $scope.slides.push(slide);
@@ -143,16 +136,22 @@ angular.module('ng-kiosk')
       setConfiguration: function(config) {
         $scope.configuration = config;
       },
-      setCurrentSlide: setCurrentSlide,
+      setCurrentSlide: function(index) {
+        if (!$scope.slides[index]) {
+          throw new Error('No slide at index ' + index);
+        }
+        $scope.slides.index = index;
+        $scope.slides.current = $scope.slides[index];
+      },
       next: function() {
         var last = $scope.slides.length - 1,
             index = ($scope.slides.index === last) ? 0 : $scope.slides.index + 1;
-        setCurrentSlide(index);
+        safe.setCurrentSlide(index);
       },
       prev: function() {
         var prev = $scope.slides.index - 1,
             index = ($scope.slides.index === 0) ? $scope.slides.length - 1 : prev;
-        setCurrentSlide(index);
+        safe.setCurrentSlide(index);
       }
     };
 
