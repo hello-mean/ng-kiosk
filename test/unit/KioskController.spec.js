@@ -47,8 +47,12 @@ describe('KioskController', function() {
     });
 
     it('should set the topics to the result of kiosk topics', inject(function(map) {
-      var mapped = map.topics(fixtures.topicResponse);
-      expect($scope.kiosk.topics).toEqual(mapped);
+      var mapped = map.topics(fixtures.topicResponse),
+          topics = [];
+      for(var i = 0; i < $scope.kiosk.topics.length; i++) {
+        topics.push($scope.kiosk.topics[i]);
+      }
+      expect(topics).toEqual(mapped);
     }));
 
     it('should set the slides to the slides of the first topic', inject(function(map) {

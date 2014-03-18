@@ -6,6 +6,7 @@ describe('Kiosk', function() {
   beforeEach(inject(function(Kiosk) {
     kiosk = Kiosk;
     kiosk.setSlides(fixtures.slides);
+    kiosk.setTopics(fixtures.topics);
   }));
 
   describe('.safe', function() {
@@ -60,7 +61,7 @@ describe('Kiosk', function() {
       expect(exec).toThrow("No slide at index 99");
     });
 
-    it('should set the current propert of the slides', function() {
+    it('should set the current property of the slides', function() {
       kiosk.setCurrentSlide(1);
       expect(kiosk.scope.slides.current).toBe(fixtures.slides[1]);
     });
@@ -92,6 +93,32 @@ describe('Kiosk', function() {
       kiosk.setCurrentSlide(0);
       kiosk.prev();
       expect(kiosk.scope.slides.index).toBe(fixtures.slides.length - 1);
+    });
+  });
+
+  describe('#setTopics()', function() {
+    it('should initialize the index to 0', function () {
+      kiosk.setTopics(fixtures.topics);
+      expect(kiosk.topics.index).toBe(0);
+    });
+  });
+
+  describe('#setCurrentTopic()', function() {
+    it('should set the index to the passed in index', function() {
+      kiosk.setCurrentTopic(1);
+      expect(kiosk.scope.topics.index).toBe(1);
+    });
+
+    it('should throw an error if index out of bounds', function() {
+      var exec = function() {
+        kiosk.setCurrentTopic(99);
+      };
+      expect(exec).toThrow("No topic at index 99");
+    });
+
+    it('should set the current property of the topics', function() {
+      kiosk.setCurrentTopic(1);
+      expect(kiosk.scope.topics.current).toBe(fixtures.topics[1]);
     });
   });
 });

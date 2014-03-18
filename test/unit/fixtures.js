@@ -101,3 +101,9 @@ window.fixtures.slides = [
   { content: ' a modern', id:4 },
   { content: ' major general', id:5 }
 ];
+
+window.fixtures.topics = [
+  { title: 'Today we are teaching poodles to fly', url: 'http://pdles.com/fly' },
+  { title: 'Wheel of Fish', url: 'http://redsnapper.com' },
+  { title: 'Conan the Librarian', url: 'http://conan.com' }
+];

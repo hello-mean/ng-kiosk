@@ -2,14 +2,14 @@
 angular.module('ng-kiosk')
   .factory('Kiosk', ['$rootScope', function($rootScope) {
     var $scope = $rootScope.$new();
-
-  
+     
     /**
      * Define functions that do not trigger a digest
      */
     var safe = {
       setTopics: function(topics) {
         $scope.topics = topics;
+        safe.setCurrentTopic(0);
       },
       setSlides: function(slides) {
         $scope.slides = slides;
@@ -37,6 +37,13 @@ angular.module('ng-kiosk')
         var prev = $scope.slides.index - 1,
             index = ($scope.slides.index === 0) ? $scope.slides.length - 1 : prev;
         safe.setCurrentSlide(index);
+      },
+      setCurrentTopic: function(index) {
+        if (!$scope.topics[index]) {
+          throw new Error('No topic at index ' + index);
+        }
+        $scope.topics.index = index;
+        $scope.topics.current = $scope.topics[index];
       }
     };
 
