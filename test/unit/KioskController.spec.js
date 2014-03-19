@@ -38,11 +38,14 @@ describe('KioskController', function() {
     var $scope = $rootScope.$new();
     setup($scope);
     $http.expectGET(fixtures.topicResponse._embedded.topic[1]._links.slide.href)
-      .respond(200);
+      .respond(200, fixtures.slideResponse.topic1);
+    $scope._slides = undefined;
     $scope.$apply(function() {
       $scope.kiosk.safe.setCurrentTopic(1);
     });
     $http.flush();
+
+    expect($scope._slides).toEqual(fixtures.slideResponse.topic1);
   });
 
   describe('data initialization', function() {

@@ -19,16 +19,31 @@ angular.module('ng-kiosk', [
     };
   }])
   .controller('KioskController', ['$scope', '$http', 'map', 'Kiosk', function($scope, $http, map, kiosk) {
+    var that = this;
+
+    var updateSlidesFromResponse = function(response) {
+      $scope.setSlides(response.data);
+      $scope.setState('is-ready');
+    };
 
     $scope.kiosk = kiosk;
 
-    $scope.$watch('kiosk.topics.current', function(newValue, oldValue) {
-      if (!oldValue || !$scope._topics) { return; }
-      var topic = $scope._topics._embedded.topic.reduce(function(r, t) {
-        if (t._links.self.href === newValue.url) { return t; }
+    this.findTopicByUrl = function(url) {
+      return $scope._topics._embedded.topic.reduce(function(r, t) {
+        if (t._links.self.href === url) { return t; }
         return r;
       });
-      if (topic) { $http.get(topic._links.slide.href); }
+    };
+
+    $scope.$watch('kiosk.topics.current', function(newValue, oldValue) {
+      var canUpdate = (oldValue && $scope._topics);
+      if (!canUpdate) { return; }
+
+      var topic = that.findTopicByUrl(newValue.url);
+      if (topic) {
+        $http.get(topic._links.slide.href)
+          .then(updateSlidesFromResponse);
+      }
     });
 
     if (!$scope.src) {
@@ -44,10 +59,7 @@ angular.module('ng-kiosk', [
         $scope.setTopics(response.data);
         return $http.get($scope._topics._embedded.topic[0]._links.slide.href);
       })
-      .then(function(response) {
-        $scope.setSlides(response.data);
-        $scope.setState('is-ready');
-      })
+      .then(updateSlidesFromResponse)
       .catch(function() {
         $scope.setState('is-error');
       });
@@ -74,6 +86,7 @@ angular.module('ng-kiosk', [
     };
 
     $scope.setState('is-initializing');
+
   }])
   .controller('SlideController', ['$scope', 'Kiosk', function($scope, Kiosk) {
     $scope.isCurrentSlide = function() {
