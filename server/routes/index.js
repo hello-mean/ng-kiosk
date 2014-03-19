@@ -7,5 +7,6 @@ exports.topic = function(req, res){
 };
 
 exports.slide = function(req, res) {
-  res.render('slide');
+  var id = req.param('id');
+  res.render('slide' + id);
 };

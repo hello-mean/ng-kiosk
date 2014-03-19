@@ -41,8 +41,7 @@ angular.module('ng-kiosk', [
 
       var topic = that.findTopicByUrl(newValue.url);
       if (topic) {
-        $http.get(topic._links.slide.href)
-          .then(updateSlidesFromResponse);
+        $http.get(topic._links.slide.href).then(updateSlidesFromResponse);
       }
     });
 

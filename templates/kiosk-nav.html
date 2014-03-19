@@ -2,7 +2,7 @@
     <nav>
         <ul>
             <li ng-repeat="topic in kiosk.topics">
-                <a href="{{topic.url}}">{{topic.title}}</a>
+                <a ng-click="kiosk.safe.setCurrentTopic($index)" href="#{{topic.url}}">{{topic.title}}</a>
             </li>
         </ul>
     </nav>

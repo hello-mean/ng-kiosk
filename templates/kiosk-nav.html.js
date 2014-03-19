@@ -4,7 +4,7 @@ angular.module("templates/kiosk-nav.html", []).run(["$templateCache", function($
     "    <nav>\n" +
     "        <ul>\n" +
     "            <li ng-repeat=\"topic in kiosk.topics\">\n" +
-    "                <a href=\"{{topic.url}}\">{{topic.title}}</a>\n" +
+    "                <a ng-click=\"kiosk.safe.setCurrentTopic($index)\" href=\"#{{topic.url}}\">{{topic.title}}</a>\n" +
     "            </li>\n" +
     "        </ul>\n" +
     "    </nav>\n" +

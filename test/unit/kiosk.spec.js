@@ -32,7 +32,7 @@ describe('kiosk', function() {
       var element = getElement();
       $httpBackend.flush();
       angular.forEach(fixtures.topicResponse._embedded.topic, function(topic) {
-        var anchor = element.find('a[href="' + topic._links.self.href + '"]');
+        var anchor = element.find('a[href="#' + topic._links.self.href + '"]');
         expect(anchor.length).toEqual(1);
         expect(anchor.text()).toEqual(topic.title);
       });
@@ -60,5 +60,19 @@ describe('kiosk', function() {
       $httpBackend.flush();
       expect(element.hasClass('is-error')).toBe(true);
     });
+  });
+
+  describe('changing selected topic', function() {
+    
+    it('should request the clicked topics slide href', function() {
+      var element = getElement();
+      $httpBackend.flush();
+      var topic = element.find('a')[1],
+          href = fixtures.topicResponse._embedded.topic[1]._links.slide.href;
+      $httpBackend.expectGET(href).respond(200, fixtures.slideResponse.topic1);  
+      angular.element(topic).click();
+      $httpBackend.flush();
+    });
+
   });
 });
