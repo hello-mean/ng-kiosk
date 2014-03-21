@@ -1,4 +1,4 @@
-#NG-KIOSK 
+#ng-kiosk
 Open Source AngularJS directive for Creating Hypermedia powered Kiosks
 [![Build Status](https://secure.travis-ci.org/hello-mean/ng-kiosk.png?branch=master)](https://travis-ci.org/hello-mean/ng-kiosk)
 =================================
