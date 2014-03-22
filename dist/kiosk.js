@@ -174,6 +174,16 @@ angular.module('ng-kiosk')
             index = ($scope.slides.index === 0) ? $scope.slides.length - 1 : prev;
         safe.setCurrentSlide(index);
       },
+      nextTopic: function() {
+        var last = $scope.topics.length - 1,
+            index = ($scope.topics.index === last) ? 0 : $scope.topics.index + 1;
+        safe.setCurrentTopic(index);
+      },
+      prevTopic: function() {
+        var prev = $scope.topics.index - 1,
+            index = ($scope.topics.index === 0) ? $scope.topics.length - 1 : prev;
+        safe.setCurrentTopic(index);
+      },
       setCurrentTopic: function(index) {
         if (!$scope.topics[index]) {
           throw new Error('No topic at index ' + index);

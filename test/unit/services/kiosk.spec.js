@@ -81,6 +81,21 @@ describe('Kiosk', function() {
     });
   });
 
+  describe('#nextTopic()', function() {
+    
+    it('should set the current topic to the next available', function() {
+      kiosk.nextTopic();
+      expect(kiosk.scope.topics.index).toBe(1);
+    });
+
+    it('should rewind to index 0 when called on last topic', function() {
+      kiosk.setCurrentTopic(fixtures.topics.length - 1);
+      kiosk.nextTopic();
+      expect(kiosk.scope.topics.index).toBe(0);
+    });
+
+  });
+
   describe('#prev()', function() {
     
     it('should set the current slide to the previous', function() {
@@ -94,6 +109,22 @@ describe('Kiosk', function() {
       kiosk.prev();
       expect(kiosk.scope.slides.index).toBe(fixtures.slides.length - 1);
     });
+  });
+
+  describe('#prevTopic()', function() {
+    
+    it('should set the current topic to the previous', function() {
+      kiosk.setCurrentTopic(2);
+      kiosk.prevTopic();
+      expect(kiosk.scope.topics.index).toBe(1);
+    });
+
+    it('should forward to last index when called on first topic', function() {
+      kiosk.setCurrentTopic(0);
+      kiosk.prevTopic();
+      expect(kiosk.scope.topics.index).toBe(fixtures.topics.length - 1);
+    });
+
   });
 
   describe('#setTopics()', function() {
