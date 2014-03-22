@@ -1,7 +1,7 @@
 <div>
     <nav>
         <ul>
-            <li ng-repeat="topic in kiosk.topics">
+            <li ng-class="{'is-active': kiosk.topics.index === $index}" ng-repeat="topic in kiosk.topics">
                 <a ng-click="kiosk.safe.setCurrentTopic($index)" href="#{{topic.url}}">{{topic.title}}</a>
             </li>
         </ul>

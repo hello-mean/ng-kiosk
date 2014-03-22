@@ -37,6 +37,21 @@ describe('kiosk', function() {
         expect(anchor.text()).toEqual(topic.title);
       });
     });
+
+    it('should set is-active class to initial topic', function() {
+      var element = getElement();
+      $httpBackend.flush();
+      var firstAnchor = angular.element(element.find('a')[0]);
+      expect(firstAnchor.parent().hasClass('is-active')).toBe(true);
+    });
+
+    it('should set is-active class to selected topic', function() {
+      var element = getElement();
+      $httpBackend.flush();
+      var secondAnchor = angular.element(element.find('a')[0]);
+      secondAnchor.click();
+      expect(secondAnchor.parent().hasClass('is-active')).toBe(true);
+    });
   });
 
   describe('state class', function() {
